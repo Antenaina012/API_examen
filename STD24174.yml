@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: STD24001
-  description: This is a specification of STD24001
+  title: STD24174
+  description: This is a specification of STD24174
   version: 1.0.0
 servers:
   - url: http://localhost:8000
