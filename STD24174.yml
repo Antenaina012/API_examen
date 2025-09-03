@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: STD24001
+  description: This is a specification of STD24001
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Ok"
+  /phones:
+    post:
+      summary: Create a list of phones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Phone'
+      responses:
+        '201':
+          description: Phones created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+    get:
+      summary: Get all phones
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+  /phones/{id}:
+    get:
+      summary: Get a phone by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: Phone not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /phones/{id}/characteristics:
+    put:
+      summary: Update phone characteristics
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacteristicUpdate'
+      responses:
+        '200':
+          description: Characteristics updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: Phone not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Characteristic:
+      type: object
+      required:
+        - ram_memory
+        - rom_memory
+      properties:
+        ram_memory:
+          type: integer
+        rom_memory:
+          type: integer
+    Phone:
+      type: object
+      required:
+        - identifier
+        - brand
+        - model
+        - characteristics
+      properties:
+        identifier:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        characteristics:
+          $ref: '#/components/schemas/Characteristic'
+    CharacteristicUpdate:
+      type: object
+      required:
+        - ram_memory
+        - rom_memory
+      properties:
+        ram_memory:
+          type: integer
+        rom_memory:
+          type: integer
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
